@@ -1,13 +1,49 @@
 import sys
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QPushButton,\
+from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QPushButton, QMessageBox,\
                             QLineEdit, QDesktopWidget, QComboBox,  QApplication
+
+from languages import Language
 
 app = QApplication(sys.argv)
 
 
 class Window(QMainWindow):
+    fr_languages = {
+        "Auto":"auto",
+        "Bulgarian":"bg",
+        "Czech":"cs",
+        "Danish": "da",
+        "German": "de",
+        "Greek": "el",
+        "English": "en",
+        "Spanish": "es",
+        "Estonian": "et",
+        "Finnish": "fi",
+        "France": "fr",
+        "Hungarian": "hu",
+        "Indonesian": "id",
+        "Italian": "it",
+        "Japan": "ja",
+        "Korean": "ko",
+        "Lithuanian": "lt",
+        "Latvian": "lv",
+        "Dutch": "nl",
+        "Polish": "pl",
+        "Portuguese": "pt",
+        "Romanian": "ro",
+        "Russian": "ru",
+        "Slovak": "sk",
+        "Slovenian": "sl",
+        "Swedish": "sv",
+        "Turkish": "tr",
+        "Ukrainian": "uk",
+        "Chinese": "zh",
+    }
+    to_languages = fr_languages.copy()
+    to_languages.pop("Auto")
+
     def __init__(self):
         super().__init__()
 
@@ -22,6 +58,9 @@ class Window(QMainWindow):
         self.buttons_window()
         self.line_edits()
         self.combo_boxes()
+
+        self.multi_translator = Language()
+        self.multi_translator.set_language("en")
 
         self.show()
         sys.exit(app.exec_())
@@ -69,3 +108,28 @@ class Window(QMainWindow):
                                          "font: 57 8pt \"Fira Code Medium\";")
         self.combo_box_two.setStyleSheet("color: rgb(255, 255, 255);\n"
                                          "font: 57 8pt \"Fira Code Medium\";")
+        
+    def reverse_language(self) -> None:
+        temp = self.fr_language.get()
+        
+        if temp in self.to_languages:
+            self.fr_language.set(self.to_language.get())
+            self.to_language.set(temp)
+        else:
+            QMessageBox.warning(
+                self,
+                self.multi_translator.get_string('error'),
+                self.multi_translator.get_string('error_auto')
+            )
+
+    def switch_language(self) -> None:
+        continue_switch = None
+
+        for language in self.multi_translator.get_languages():
+            if language != self.multi_translator.get_select_language():
+                continue_switch = language
+                break
+
+        self.multi_translator.set_language(continue_switch)
+
+        # TODO: Reconfigure PyQt objects
