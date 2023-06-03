@@ -4,7 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QPushButton, QMessageBox,\
                             QLineEdit, QDesktopWidget, QComboBox,  QApplication
 
-from languages import Language
+from .languages import Language
 
 app = QApplication(sys.argv)
 
